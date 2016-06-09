@@ -3,6 +3,8 @@ Helptags
 
 syntax on
 
+set mouse=a
+
 set number
 set pastetoggle=<F2>
 set smartindent

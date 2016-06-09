@@ -8,6 +8,11 @@ function gcb() {
                 echo ""
         fi
 }
+
+# Make prompt smaller
+PROMPT_DIRTRIM=1
+
+# prompt colors and git
 export PS1='[\e[0;33m\e[m\e[0;32m\w\e[m] \e[0;33m[$(gcb)]\e[m $ '
 
 # disable the most irritating terminal emulation feature ever known
@@ -52,6 +57,9 @@ alias mv="mv -i"
 alias ln="ln -i"
 alias cp="cp -i"
 
+# ls alias
+alias ll='ls -alF'
+
 # i'm used to this now
 unalias reset &>/dev/null
 alias realreset="$(which reset)"
@@ -74,6 +82,10 @@ pathmunge "/usr/sbin"
 pathmunge "/usr/local/bin" 
 pathmunge "/usr/local/sbin" 
 pathmunge "$HOME/local/bin" 
+
+
+export PATH=$PATH:/opt/backtrace/bin
+
 
 export LD_LIBRARY_PATH="/usr/lib:/usr/local/lib64:/usr/lib64:/usr/local/adnxs/lib:$HOME/local/lib:/usr/local/lib:$LD_LIRARY_PATH"
 export C_INCLUDE_PATH="/usr/local/adnxs/include:$HOME/local/include:/usr/local/include:$C_INCLUDE_PATH"
