@@ -59,6 +59,7 @@ alias cp="cp -i"
 
 # ls alias
 alias ll='ls -alF'
+alias l='ls'
 
 # i'm used to this now
 unalias reset &>/dev/null
