@@ -5,7 +5,7 @@ syntax on
 
 set mouse=a
 
-au BufNewFile,BufRead *.html,*.htm,*.shtml,*.stm,*.tmpl set ft=jinja
+"au BufNewFile,BufRead *.html,*.htm,*.shtml,*.stm,*.tmpl set ft=jinja
 
 set number
 set pastetoggle=<F2>

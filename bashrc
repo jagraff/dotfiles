@@ -9,9 +9,30 @@ function gcb() {
         fi
 }
 
-PROMPT_DIRTRIM=1
+#PROMPT_DIRTRIM=3
+
+function __my_prompt_command() {
+	local EXIT="$?"
+	PS1=""
+	local Green='\[\e[0;32m\]'
+	local Yellow='\[\e[0;33m\]'
+	local Red='\[\e[0;31m\]'
+	local Reset='\[\e[m\]'
+
+	PS1+="${Green}[\w]${Reset} "
+	PS1+="${Yellow}[$(gcb)]${Reset} "
+
+	if [ $EXIT != 0 ]; then
+		PS1+="${Red}[${EXIT}] $ ${Reset}"
+	else
+		PS1+="$ "
+	fi
+}
+
+export PROMPT_COMMAND=__my_prompt_command
+
 # prompt colors and git
-export PS1='[\[\e[0;33m\]\[\e[m\]\[\e[0;32m\]\w\[\e[m\]] \[\e[0;33m\][$(gcb)]\[\e[m\] $ '
+ export PS1='[\[\e[0;33m\]\[\e[m\]\[\e[0;32m\]\w\[\e[m\]] \[\e[0;33m\][$(gcb)]\[\e[m\] $ '
 
 # disable the most irritating terminal emulation feature ever known
 stty -ixon
@@ -50,7 +71,6 @@ alias jmux="tmux -S /tmp/john.tmux"
 export EDITOR=vim
 
 # interactive for safety
-alias rm="rm -i"
 alias mv="mv -i"
 alias ln="ln -i"
 alias cp="cp -i"
@@ -81,6 +101,7 @@ pathmunge "/usr/sbin"
 pathmunge "/usr/local/bin" 
 pathmunge "/usr/local/sbin" 
 pathmunge "$HOME/local/bin" 
+pathmunge "/usr/games"
 
 
 export PATH=$PATH:/opt/backtrace/bin
@@ -92,7 +113,7 @@ export C_INCLUDE_PATH="/usr/local/adnxs/include:$HOME/local/include:/usr/local/i
 shopt -s histappend
 export HISTIGNORE="ls:cd ~:cd ..:exit:h:history"
 export HISTCONTROL="erasedups"
-export PROMPT_COMMAND="history -a" # so history flushes after each command
+#export PROMPT_COMMAND="history -a" # so history flushes after each command
 
 function h {
     pattern=$1
