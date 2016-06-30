@@ -36,7 +36,7 @@ autocmd BufNew,BufEnter *.erb set shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 autocmd BufNew,BufEnter *.h set ft=c
 
 " 4 spaces to the prevailing indentation when continuing a line
-set cinoptions=+4,(4
+"set cinoptions=+4,(4
 
 " so Makefiles work with expandtab
 autocmd FileType make setlocal noexpandtab
