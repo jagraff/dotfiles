@@ -20,6 +20,8 @@ filetype plugin on
 colorscheme desert
 cmap w!! w !sudo tee >/dev/null %
 
+set textwidth=80
+
 autocmd FileType c set sw=8 ts=8 sts=8 noexpandtab
 autocmd FileType cc set sw=8 ts=8 sts=8 noexpandtab
 autocmd FileType cpp set sw=8 ts=8 sts=8 noexpandtab
