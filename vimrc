@@ -6,6 +6,11 @@ syntax on
 set mouse=a
 
 "au BufNewFile,BufRead *.html,*.htm,*.shtml,*.stm,*.tmpl set ft=jinja
+"
+"
+
+" whitespace highlighting
+match ErrorMsg '\s\+$'
 
 set number
 set pastetoggle=<F2>
