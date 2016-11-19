@@ -27,13 +27,13 @@ cmap w!! w !sudo tee >/dev/null %
 
 set textwidth=80
 
-autocmd FileType c set sw=8 ts=8 sts=8 noexpandtab
-autocmd FileType cc set sw=8 ts=8 sts=8 noexpandtab
-autocmd FileType cpp set sw=8 ts=8 sts=8 noexpandtab
-autocmd FileType h set sw=8 ts=8 sts=8 noexpandtab
-autocmd FileType hpp set sw=8 ts=8 sts=8 noexpandtab
+autocmd FileType c set sw=4 ts=4 sts=4 noexpandtab
+autocmd FileType cc set sw=4 ts=4 sts=4 noexpandtab
+autocmd FileType cpp set sw=4 ts=4 sts=4 noexpandtab
+autocmd FileType h set sw=4 ts=4 sts=4 noexpandtab
+autocmd FileType hpp set sw=4 ts=4 sts=4 noexpandtab
 autocmd FileType python set sw=4 ts=4 sts=4 expandtab
-autocmd FileType java set sw=4 ts=4 sts=4 expandtab
+autocmd FileType java set sw=4 ts=4 sts=4 noexpandtab
 autocmd FileType javascript set shiftwidth=4 tabstop=4 softtabstop=4 noexpandtab
 autocmd FileType jade set shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 autocmd FileType ruby set shiftwidth=2 tabstop=2 softtabstop=2 expandtab
