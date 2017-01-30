@@ -19,6 +19,12 @@ function __my_prompt_command() {
 	local Red='\[\e[0;31m\]'
 	local Reset='\[\e[m\]'
 
+	if [[ "$VIRTUAL_ENV" != "" ]]
+	then
+		path=$(basename $VIRTUAL_ENV)
+		PS1+="($path)"
+	fi
+
 	PS1+="${Green}[\w]${Reset} "
 	PS1+="${Yellow}[$(gcb)]${Reset} "
 
