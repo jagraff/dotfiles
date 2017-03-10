@@ -16,17 +16,24 @@ function __my_prompt_command() {
 	PS1=""
 	local Green='\[\e[0;32m\]'
 	local Yellow='\[\e[0;33m\]'
+	local Blue='\[\e[0;34m\]'
+	local Magenta='\[\e[0;95m\]'
 	local Red='\[\e[0;31m\]'
 	local Reset='\[\e[m\]'
 
 	if [[ "$VIRTUAL_ENV" != "" ]]
 	then
-		path=$(basename $VIRTUAL_ENV)
-		PS1+="($path)"
+		source $VIRTUAL_ENV/bin/activate
 	fi
 
-	PS1+="${Green}[\w]${Reset} "
-	PS1+="${Yellow}[$(gcb)]${Reset} "
+
+	if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
+		PS1+="${Blue}[\w]${Reset} "
+		PS1+="${Magenta}[$(gcb)]${Reset} "
+	else
+		PS1+="${Green}[\w]${Reset} "
+		PS1+="${Yellow}[$(gcb)]${Reset} "
+	fi
 
 	if [ $EXIT != 0 ]; then
 		PS1+="${Red}[${EXIT}] $ ${Reset}"
