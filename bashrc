@@ -58,8 +58,12 @@ set -o emacs
 # impossible to see on an osx terminal
 unamestr=$(uname | tr '[:upper:]' '[:lower:]')
 if [ $unamestr == 'linux' ] ; then
-    alias ls="ls --color=auto"
-    export LS_COLORS='di=33'
+	alias ls="ls --color=auto"
+	if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
+		export LS_COLORS='di=95'
+	else
+		export LS_COLORS='di=33'
+	fi
 elif [ $unamestr == 'darwin' ] ; then
     alias ls="ls -G"
     export CLICOLOR=1
