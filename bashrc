@@ -11,6 +11,16 @@ function gcb() {
 
 PROMPT_DIRTRIM=3
 
+SMALLPROMPT=0
+
+function toggle() {
+    if [ $SMALLPROMPT != 1 ]; then
+        SMALLPROMPT=1
+    else
+        SMALLPROMPT=0
+    fi
+}
+
 function __my_prompt_command() {
 	local EXIT="$?"
 	PS1=""
@@ -21,19 +31,11 @@ function __my_prompt_command() {
 	local Red='\[\e[0;31m\]'
 	local Reset='\[\e[m\]'
 
-	if [[ "$VIRTUAL_ENV" != "" ]]
-	then
-		source $VIRTUAL_ENV/bin/activate
-	fi
 
-
-	if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
-		PS1+="${Blue}[\w]${Reset} "
-		PS1+="${Magenta}[$(gcb)]${Reset} "
-	else
-		PS1+="${Green}[\w]${Reset} "
-		PS1+="${Yellow}[$(gcb)]${Reset} "
-	fi
+    if [ $SMALLPROMPT != 1 ]; then
+	    PS1+="${Green}[\w]${Reset} "
+    fi
+	PS1+="${Yellow}[$(gcb)]${Reset} "
 
 	if [ $EXIT != 0 ]; then
 		PS1+="${Red}[${EXIT}] $ ${Reset}"
@@ -42,6 +44,7 @@ function __my_prompt_command() {
 	fi
 }
 
+shopt -s checkwinsize
 export PROMPT_COMMAND=__my_prompt_command
 
 # prompt colors and git
@@ -59,11 +62,7 @@ set -o emacs
 unamestr=$(uname | tr '[:upper:]' '[:lower:]')
 if [ $unamestr == 'linux' ] ; then
 	alias ls="ls --color=auto"
-	if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
-		export LS_COLORS='di=95'
-	else
-		export LS_COLORS='di=33'
-	fi
+	export LS_COLORS='di=33'
 elif [ $unamestr == 'darwin' ] ; then
     alias ls="ls -G"
     export CLICOLOR=1
@@ -95,6 +94,10 @@ alias cp="cp -i"
 # ls alias
 alias ll='ls -alF'
 alias l='ls'
+alias lc='ll | cowsay -n'
+
+# I don't want to type .. a lot
+alias cb='cd ..'
 
 # i'm used to this now
 unalias reset &>/dev/null

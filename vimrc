@@ -25,7 +25,6 @@ filetype plugin on
 colorscheme desert
 cmap w!! w !sudo tee >/dev/null %
 
-set textwidth=80
 
 autocmd FileType c set sw=4 ts=4 sts=4 noexpandtab
 autocmd FileType cc set sw=4 ts=4 sts=4 noexpandtab
@@ -37,10 +36,12 @@ autocmd FileType java set sw=4 ts=4 sts=4 noexpandtab
 autocmd FileType javascript set shiftwidth=4 tabstop=4 softtabstop=4 noexpandtab
 autocmd FileType jade set shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 autocmd FileType ruby set shiftwidth=2 tabstop=2 softtabstop=2 expandtab
-autocmd FileType html set shiftwidth=2 tabstop=2 softtabstop=2 expandtab
+autocmd FileType html set shiftwidth=4 tabstop=4 softtabstop=4 expandtab
 autocmd FileType lisp set shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 autocmd BufNew,BufEnter *.erb set shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 autocmd BufNew,BufEnter *.h set ft=c
+
+set sw=4 ts=4 sts=4 expandtab
 
 " 4 spaces to the prevailing indentation when continuing a line
 "set cinoptions=+4,(4
