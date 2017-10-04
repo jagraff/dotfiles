@@ -4,6 +4,7 @@ Helptags
 syntax on
 
 set mouse=a
+set ttymouse=xterm2
 
 "au BufNewFile,BufRead *.html,*.htm,*.shtml,*.stm,*.tmpl set ft=jinja
 "
@@ -22,22 +23,28 @@ set autoindent
 set hlsearch
 filetype indent on
 filetype plugin on
-colorscheme desert
+" colorscheme desert
 cmap w!! w !sudo tee >/dev/null %
 
 
-autocmd FileType c set sw=4 ts=4 sts=4 noexpandtab
-autocmd FileType cc set sw=4 ts=4 sts=4 noexpandtab
-autocmd FileType cpp set sw=4 ts=4 sts=4 noexpandtab
-autocmd FileType h set sw=4 ts=4 sts=4 noexpandtab
-autocmd FileType hpp set sw=4 ts=4 sts=4 noexpandtab
+autocmd FileType c call SetCOptions()
+autocmd FileType cc call SetCOptions()
+autocmd FileType cpp call SetCOptions()
+autocmd FileType h call SetCOptions()
+autocmd FileType hpp call SetCOptions()
+function SetCOptions()
+    match ErrorMsg '^ \+\|\s\+$'
+    set sw=8 ts=8 sts=8 noexpandtab
+endfunction
+
 autocmd FileType python set sw=4 ts=4 sts=4 expandtab
-autocmd FileType java set sw=4 ts=4 sts=4 noexpandtab
+autocmd FileType java set sw=4 ts=4 sts=4 expandtab
 autocmd FileType javascript set shiftwidth=4 tabstop=4 softtabstop=4 noexpandtab
 autocmd FileType jade set shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 autocmd FileType ruby set shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 autocmd FileType html set shiftwidth=4 tabstop=4 softtabstop=4 expandtab
 autocmd FileType lisp set shiftwidth=2 tabstop=2 softtabstop=2 expandtab
+autocmd FileType lua set shiftwidth=4 tabstop=4 softtabstop=4 expandtab
 autocmd BufNew,BufEnter *.erb set shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 autocmd BufNew,BufEnter *.h set ft=c
 
@@ -191,13 +198,22 @@ endif
 " always only create one connections in one Vim instance. It is not practical
 " if you are using multiple data connections in one Vim instance.
 func ResetCScopeDB()
-    :!find . -iname '*.c' -o -iname '*.cpp' -o -iname '*.h' -o -iname '*.hpp' > .cscope.files &&
+    :!find . -iname '*.c' -o -iname '*.cpp' -o -iname '*.h' -o -iname '*.hpp'  -o -iname "*.lua" -o -iname "*.py" -o -iname "*.java" > .cscope.files &&
         \cscope -q -k -b -i .cscope.files -f .cscope.out && 
 	\echo Built cscope database from $(cat .cscope.files | wc -l) files
     :cs kill -1
     :cs add .cscope.out
 endfunc
 map HH :call ResetCScopeDB()<Return>
+
+function! s:DiffWithSaved()
+    let filetype=&ft
+    diffthis
+    vnew | r # | normal! 1Gdd
+    diffthis
+    exe "setlocal bt=nofile bh=wipe nobl noswf ro ft=" . filetype
+endfunction
+com! DiffSaved call s:DiffWithSaved()
 
 " for macvim
 if has("gui_macvim")

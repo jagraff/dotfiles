@@ -54,7 +54,7 @@ export PROMPT_COMMAND=__my_prompt_command
 stty -ixon
 
 # vi bindings are great everywhere except the command line
-set -o emacs
+set -o vi
 
 # this bundle of joy is for portable LS colors.
 # I like yellow dictories because bold blue is
@@ -122,6 +122,7 @@ pathmunge "/usr/local/bin"
 pathmunge "/usr/local/sbin" 
 pathmunge "$HOME/local/bin" 
 pathmunge "/usr/games"
+pathmunge "/opt/labrat/bin"
 
 
 export PATH=$PATH:/opt/backtrace/bin
@@ -129,6 +130,10 @@ export PATH=$PATH:/opt/backtrace/bin
 
 export LD_LIBRARY_PATH="/usr/lib:/usr/local/lib64:/usr/lib64:/usr/local/adnxs/lib:$HOME/local/lib:/usr/local/lib:$LD_LIRARY_PATH"
 export C_INCLUDE_PATH="/usr/local/adnxs/include:$HOME/local/include:/usr/local/include:$C_INCLUDE_PATH"
+
+
+export RATSODA_PATH="/home/jgraff/git/appnexus/ratsoda"
+export LUA_PATH="/usr/include/rtp-messages/?.lua;${RATSODA_PATH}/ratsoda/interpreter/lua/?.lua;${RATSODA_PATH}/common/?.lua;${RATSODA_PATH}/build/bpgen/?.lua"
 
 shopt -s histappend
 export HISTIGNORE="ls:cd ~:cd ..:exit:h:history"
