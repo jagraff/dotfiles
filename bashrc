@@ -33,9 +33,9 @@ function __my_prompt_command() {
 
 
     if [ $SMALLPROMPT != 1 ]; then
-	    PS1+="${Green}[\w]${Reset} "
+	    PS1+="${Blue}[\D{%T}] ${Green}[\w]${Reset} "
     fi
-	PS1+="${Yellow}[$(gcb)]${Reset} "
+	PS1+="${Yellow}[$(gcb)]${Reset} \n"
 
 	if [ $EXIT != 0 ]; then
 		PS1+="${Red}[${EXIT}] $ ${Reset}"
@@ -98,6 +98,7 @@ alias lc='ll | cowsay -n'
 
 # I don't want to type .. a lot
 alias cb='cd ..'
+alias ..='cd ..'
 
 # i'm used to this now
 unalias reset &>/dev/null
@@ -123,6 +124,7 @@ pathmunge "/usr/local/sbin"
 pathmunge "$HOME/local/bin" 
 pathmunge "/usr/games"
 pathmunge "/opt/labrat/bin"
+pathmunge "/Users/jacobgraff/Library/Python/3.7/bin/"
 
 
 export PATH=$PATH:/opt/backtrace/bin
@@ -150,3 +152,5 @@ if [[ -S "$SSH_AUTH_SOCK" && ! -h "$SSH_AUTH_SOCK" ]]; then
     ln -sf "$SSH_AUTH_SOCK" ~/.ssh/ssh_auth_sock;
 fi
 export SSH_AUTH_SOCK=~/.ssh/ssh_auth_sock;
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash

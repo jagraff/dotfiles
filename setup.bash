@@ -1,4 +1,4 @@
-files=".vimrc .bashrc .tmux.conf"
+files=".vimrc .bashrc .tmux.conf .gitconfig"
 for f in $files ; do
     fullpath="$HOME/$f"
     rm -f $fullpath
