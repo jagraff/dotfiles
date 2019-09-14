@@ -11,3 +11,4 @@ email = jacob@giphy.com
     branch-name = "!git rev-parse --abbrev-ref HEAD"
     publish = "!git push -u origin $(git branch-name)"
     a = "add -u"
+
