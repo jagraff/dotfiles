@@ -23,25 +23,50 @@ function toggle() {
 
 function __my_prompt_command() {
 	local EXIT="$?"
-	PS1=""
 	local Green='\[\e[0;32m\]'
 	local Yellow='\[\e[0;33m\]'
-	local Blue='\[\e[0;34m\]'
-	local Magenta='\[\e[0;95m\]'
 	local Red='\[\e[0;31m\]'
+	local Blue='\[\e[0;34m\]'
+    local White='\[\e[0;37;0m\]'
+	local Magenta='\[\e[0;95m\]'
 	local Reset='\[\e[m\]'
 
+    local GreenOnBlack='\[\e[0;32;40m\]'
+    local YellowOnBlack='\[\e[1;33;40m\]'
+    local RedOnBlack='\[\e[0;31;40m\]'
+    local BlueOnBlack='\[\e[0;34;40m\]'
+    local WhiteOnBlack='\[\e[0;37;40m\]'
 
-    if [ $SMALLPROMPT != 1 ]; then
-	    PS1+="${Blue}[\D{%T}] ${Green}[\w]${Reset} "
+    local BlackOnGreen='\[\e[0;30;42m\]'
+    local BlackOnYellow='\[\e[0;30;43m\]'
+    local BlackOnRed='\[\e[1;30;41m\]'
+    local BlackOnBlue='\[\e[0;30;44m\]'
+    local BlackOnWhite='\[\e[0;30;47m\]'
+
+    local BlueOnGreen='\[\e[0;34;42m\]'
+    local WhiteOnGreen='\[\e[1;37;45m\]'
+
+    local clock_color=$BlueOnBlack
+    local dir_color=$BlackOnGreen
+    local git_color=$BlackOnYellow
+    local exit_color=$BlackOnRed
+    local prompt_color=$White
+    local default_color=$WhiteOnBlack
+
+    local clock_s="${clock_color}\D{%T} "
+    local dir_s="${dir_color} \w "
+    local prompt_s="${prompt_color}\$"
+
+    if [ $EXIT != 0 ]; then
+        local exit_s="${exit_color} ${EXIT} "
     fi
-	PS1+="${Yellow}[$(gcb)]${Reset} \n"
 
-	if [ $EXIT != 0 ]; then
-		PS1+="${Red}[${EXIT}] $ ${Reset}"
-	else
-		PS1+="$ "
-	fi
+    if [ $(gcb) ]; then
+        local git_s="${git_color} $(gcb) "
+    fi
+
+    PS1="${clock_s}${git_s}${dir_s}${exit_s}${White}\n${prompt_s}${White} "
+
 }
 
 shopt -s checkwinsize
