@@ -26,6 +26,10 @@ function k_context() {
     echo "$curr_context" | awk '{ split($1, cmpts, "."); print(cmpts[1]) }'
 }
 
+function is_prod_context() {
+    kubectl config current-context | grep prod
+}
+
 function __my_prompt_command() {
 	local EXIT="$?"
 	local Green='\[\e[0;32m\]'
@@ -53,6 +57,8 @@ function __my_prompt_command() {
     local WhiteOnGreen='\[\e[1;37;45m\]'
     local WhiteOnBlue='\[\e[1;37;46m\]'
 
+    local GreenOnWhite='\[\e[0;32;47m\]'
+
     local clock_color=$BlueOnBlack
     local dir_color=$BlackOnGreen
     local git_color=$BlackOnYellow
@@ -60,6 +66,10 @@ function __my_prompt_command() {
     local exit_color=$BlackOnRed
     local prompt_color=$White
     local default_color=$WhiteOnBlack
+
+    if [ $(is_prod_context) ]; then
+        k8s_color=$GreenOnWhite
+    fi
 
     local clock_s="${clock_color}\D{%T} "
     local k8s_s="${k8s_color} $(k_context) "
