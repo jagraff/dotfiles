@@ -13,6 +13,10 @@ PROMPT_DIRTRIM=3
 
 SMALLPROMPT=0
 
+function fetch_context() {
+    KUBECTL_CONTEXT=$(kubectl config current-context)
+}
+
 function toggle() {
     if [ $SMALLPROMPT != 1 ]; then
         SMALLPROMPT=1
@@ -22,42 +26,43 @@ function toggle() {
 }
 
 function k_context() {
-    local curr_context=$(kubectl config current-context)
+    local curr_context=$KUBECTL_CONTEXT
     echo "$curr_context" | awk '{ split($1, cmpts, "."); print(cmpts[1]) }'
 }
 
 function is_prod_context() {
-    kubectl config current-context | grep prod
+    echo $KUBECTL_CONTEXT | ag prod
 }
+
+Green='\[\e[0;32m\]'
+Yellow='\[\e[0;33m\]'
+Red='\[\e[0;31m\]'
+Blue='\[\e[0;34m\]'
+White='\[\e[0;37;0m\]'
+Magenta='\[\e[0;95m\]'
+Reset='\[\e[m\]'
+
+GreenOnBlack='\[\e[0;32;40m\]'
+YellowOnBlack='\[\e[1;33;40m\]'
+RedOnBlack='\[\e[0;31;40m\]'
+BlueOnBlack='\[\e[0;34;40m\]'
+WhiteOnBlack='\[\e[0;37;40m\]'
+
+BlackOnGreen='\[\e[0;30;42m\]'
+BlackOnYellow='\[\e[0;30;43m\]'
+BlackOnRed='\[\e[1;30;41m\]'
+BlackOnBlue='\[\e[0;30;44m\]'
+BlackOnWhite='\[\e[0;30;47m\]'
+
+BlueOnGreen='\[\e[0;34;42m\]'
+
+WhiteOnGreen='\[\e[1;37;45m\]'
+WhiteOnBlue='\[\e[1;37;46m\]'
+
+GreenOnWhite='\[\e[0;32;47m\]'
 
 function __my_prompt_command() {
 	local EXIT="$?"
-	local Green='\[\e[0;32m\]'
-	local Yellow='\[\e[0;33m\]'
-	local Red='\[\e[0;31m\]'
-	local Blue='\[\e[0;34m\]'
-    local White='\[\e[0;37;0m\]'
-	local Magenta='\[\e[0;95m\]'
-	local Reset='\[\e[m\]'
-
-    local GreenOnBlack='\[\e[0;32;40m\]'
-    local YellowOnBlack='\[\e[1;33;40m\]'
-    local RedOnBlack='\[\e[0;31;40m\]'
-    local BlueOnBlack='\[\e[0;34;40m\]'
-    local WhiteOnBlack='\[\e[0;37;40m\]'
-
-    local BlackOnGreen='\[\e[0;30;42m\]'
-    local BlackOnYellow='\[\e[0;30;43m\]'
-    local BlackOnRed='\[\e[1;30;41m\]'
-    local BlackOnBlue='\[\e[0;30;44m\]'
-    local BlackOnWhite='\[\e[0;30;47m\]'
-
-    local BlueOnGreen='\[\e[0;34;42m\]'
-
-    local WhiteOnGreen='\[\e[1;37;45m\]'
-    local WhiteOnBlue='\[\e[1;37;46m\]'
-
-    local GreenOnWhite='\[\e[0;32;47m\]'
 
     local clock_color=$BlueOnBlack
     local dir_color=$BlackOnGreen
@@ -66,6 +71,8 @@ function __my_prompt_command() {
     local exit_color=$BlackOnRed
     local prompt_color=$White
     local default_color=$WhiteOnBlack
+
+    fetch_context
 
     if [ $(is_prod_context) ]; then
         k8s_color=$GreenOnWhite
@@ -80,26 +87,24 @@ function __my_prompt_command() {
         local exit_s="${exit_color} ${EXIT} "
     fi
 
-    if [ $(gcb) != "[-]" ]; then
+    local gcb_output=$(gcb)
+
+    if [ $gcb_output != "[-]" ]; then
         git_color=$BlackOnYellow
     fi
 
-    local git_s="${git_color}$(gcb)"
+    local git_s="${git_color}${gcb_output}"
 
-    PS1="${clock_s}${git_s}${k8s_s}${dir_s}${exit_s}${White}\n${prompt_s} ${RESET}"
-
+    PS1="${clock_s}${git_s}${k8s_s}${dir_s}${exit_s}${White}${RESET}\n${prompt_s} "
 }
 
 shopt -s checkwinsize
 export PROMPT_COMMAND=__my_prompt_command
 
-# prompt colors and git
-# export PS1='[\[\e[0;33m\]\[\e[m\]\[\e[0;32m\]\w\[\e[m\]] \[\e[0;33m\][$(gcb)]\[\e[m\] $ '
-
 # disable the most irritating terminal emulation feature ever known
 stty -ixon
 
-# vi bindings are great everywhere except the command line
+# vi bindings are great everywhere
 set -o vi
 
 # this bundle of joy is for portable LS colors.
