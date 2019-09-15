@@ -68,7 +68,7 @@ function __my_prompt_command() {
     local default_color=$WhiteOnBlack
 
     if [ $(is_prod_context) ]; then
-        k8s_color=$GreenOnWhite
+        k8s_color=$BlackOnWhite
     fi
 
     local clock_s="${clock_color}\D{%T} "
