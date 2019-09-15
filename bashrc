@@ -21,6 +21,11 @@ function toggle() {
     fi
 }
 
+function k_context() {
+    local curr_context=$(kubectl config current-context)
+    echo "$curr_context" | awk '{ split($1, cmpts, "."); print(cmpts[1]) }'
+}
+
 function __my_prompt_command() {
 	local EXIT="$?"
 	local Green='\[\e[0;32m\]'
@@ -44,16 +49,20 @@ function __my_prompt_command() {
     local BlackOnWhite='\[\e[0;30;47m\]'
 
     local BlueOnGreen='\[\e[0;34;42m\]'
+
     local WhiteOnGreen='\[\e[1;37;45m\]'
+    local WhiteOnBlue='\[\e[1;37;46m\]'
 
     local clock_color=$BlueOnBlack
     local dir_color=$BlackOnGreen
     local git_color=$BlackOnYellow
+    local k8s_color=$GreenOnBlack
     local exit_color=$BlackOnRed
     local prompt_color=$White
     local default_color=$WhiteOnBlack
 
     local clock_s="${clock_color}\D{%T} "
+    local k8s_s="${k8s_color} $(k_context) "
     local dir_s="${dir_color} \w "
     local prompt_s="${prompt_color}\$"
 
@@ -65,7 +74,7 @@ function __my_prompt_command() {
         local git_s="${git_color} $(gcb) "
     fi
 
-    PS1="${clock_s}${git_s}${dir_s}${exit_s}${White}\n${prompt_s}${White} "
+    PS1="${clock_s}${git_s}${k8s_s}${dir_s}${exit_s}${White}\n${prompt_s}${White} "
 
 }
 
