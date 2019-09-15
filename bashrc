@@ -3,9 +3,9 @@ function gcb() {
         current_branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
         if [ $? -eq 0 ]
         then
-                echo $current_branch
+                echo " $current_branch "
         else
-                echo ""
+                echo "[-]"
         fi
 }
 
@@ -61,14 +61,14 @@ function __my_prompt_command() {
 
     local clock_color=$BlueOnBlack
     local dir_color=$BlackOnGreen
-    local git_color=$BlackOnYellow
+    local git_color=$YellowOnBlack
     local k8s_color=$GreenOnBlack
     local exit_color=$BlackOnRed
     local prompt_color=$White
     local default_color=$WhiteOnBlack
 
     if [ $(is_prod_context) ]; then
-        k8s_color=$BlackOnWhite
+        k8s_color=$GreenOnWhite
     fi
 
     local clock_s="${clock_color}\D{%T} "
@@ -80,11 +80,13 @@ function __my_prompt_command() {
         local exit_s="${exit_color} ${EXIT} "
     fi
 
-    if [ $(gcb) ]; then
-        local git_s="${git_color} $(gcb) "
+    if [ $(gcb) != "[-]" ]; then
+        git_color=$BlackOnYellow
     fi
 
-    PS1="${clock_s}${git_s}${k8s_s}${dir_s}${exit_s}${White}\n${prompt_s}${White} "
+    local git_s="${git_color}$(gcb)"
+
+    PS1="${clock_s}${git_s}${k8s_s}${dir_s}${exit_s}${White}\n${prompt_s} ${RESET}"
 
 }
 
