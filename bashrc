@@ -9,6 +9,12 @@ function gcb() {
         fi
 }
 
+function k_context() {
+    current_context=$(kubectl config current-context | cut -f1 -d".")
+
+    echo $current_context
+}
+
 PROMPT_DIRTRIM=3
 
 SMALLPROMPT=0
@@ -34,6 +40,14 @@ function is_prod_context() {
     echo $KUBECTL_CONTEXT | ag prod
 }
 
+function is_prod_k8s_dir() {
+    pwd | ag "kube-manifests.*prod"
+}
+
+function is_k8s_dir() {
+    pwd | ag "kube-manifests"
+}
+
 Green='\[\e[0;32m\]'
 Yellow='\[\e[0;33m\]'
 Red='\[\e[0;31m\]'
@@ -57,15 +71,24 @@ BlackOnWhite='\[\e[0;30;47m\]'
 BlueOnGreen='\[\e[0;34;42m\]'
 
 WhiteOnGreen='\[\e[1;37;45m\]'
-WhiteOnBlue='\[\e[1;37;46m\]'
+WhiteOnBlue='\[\e[1;35;40m\]'
 
 GreenOnWhite='\[\e[0;32;47m\]'
+RedOnWhite='\[\e[0;31;47m\]'
+
+
+function clean_dir_string() {
+    local cleaned=$(pwd  | sed -e 's/\/Users\/jacobgraff\/git\/giphy\/giphy-services/~\/g\/g\/g/g')
+
+    echo $cleaned | egrep "~"
+}
+
 
 function __my_prompt_command() {
 	local EXIT="$?"
 
     local clock_color=$BlueOnBlack
-    local dir_color=$BlackOnGreen
+    local dir_color=$WhiteOnBlue
     local git_color=$YellowOnBlack
     local k8s_color=$GreenOnBlack
     local exit_color=$BlackOnRed
@@ -75,13 +98,21 @@ function __my_prompt_command() {
     fetch_context
 
     if [ $(is_prod_context) ]; then
-        k8s_color=$GreenOnWhite
+        k8s_color=$RedOnWhite
+        if [ -z $(is_prod_k8s_dir) ]; then
+            dir_color=$BlackOnRed
+        fi
+    else
+        if [ $(is_prod_k8s_dir) ]; then
+            dir_color=$BlackOnRed
+        fi
     fi
 
-    local clock_s="${clock_color}\D{%T} "
+    local clock_s="${clock_color} \D{%T} "
     local k8s_s="${k8s_color} $(k_context) "
     local dir_s="${dir_color} \w "
     local prompt_s="${prompt_color}\$"
+    local nl_s="${White}${RESET}\n"
 
     if [ $EXIT != 0 ]; then
         local exit_s="${exit_color} ${EXIT} "
@@ -93,9 +124,14 @@ function __my_prompt_command() {
         git_color=$BlackOnYellow
     fi
 
+    local cleaned=$(clean_dir_string) 
+    if [ $cleaned ]; then
+        dir_s="${dir_color} ${cleaned} "
+    fi
+
     local git_s="${git_color}${gcb_output}"
 
-    PS1="${clock_s}${git_s}${k8s_s}${dir_s}${exit_s}${White}${RESET}\n${prompt_s} "
+    PS1="${clock_s}${git_s}${k8s_s}${exit_s}${nl_s}${dir_s}${nl_s}${prompt_s} "
 }
 
 shopt -s checkwinsize
@@ -128,6 +164,10 @@ alias ag="ag -if"
 
 alias grep="grep --color=auto"
 
+# random tools
+alias copen='open -a "Google Chrome"'
+alias plot='/Users/jacobgraff/git/chriswolfvision/eplot/eplot -d 2>/dev/null'
+
 # use vimdiff for git diffs so they don't suck
 alias gitdiff='git difftool --tool=vimdiff'
 
@@ -142,14 +182,32 @@ alias mv="mv -i"
 alias ln="ln -i"
 alias cp="cp -i"
 
+unalias ll 2>/dev/null
+function ll() { ls -alF "$@" | lolcat -r -h 1 -v 1; }
+
 # ls alias
-alias ll='ls -alF'
 alias l='ls'
 alias lc='ll | cowsay -n'
 
 # I don't want to type .. a lot
-alias cb='cd ..'
 alias ..='cd ..'
+alias gs='cd ~/git/giphy/giphy-services'
+
+# K8S contexts
+alias k=kubectl
+alias ks='k config use-context'
+alias snek='ks whitesnake.prod.giphy.tech'
+alias nkotb='ks nkotb.qa.giphy.tech'
+alias violet='ks prod-violet.giphy.tech'
+alias ratt='ks ratt.prod.giphy.tech'
+alias lfo='ks lfo.dev.giphy.tech'
+
+
+export GS="~/git/giphy/giphy-services"
+
+alias spp="$(git rev-parse --show-toplevel 2> /dev/null)/scripts/set_pants_python.sh"
+alias sps="$(git rev-parse --show-toplevel 2> /dev/null)/scripts/set_pants_scala_2_12.sh"
+
 
 # i'm used to this now
 unalias reset &>/dev/null
@@ -179,6 +237,8 @@ pathmunge "/Users/jacobgraff/Library/Python/3.7/bin/"
 
 
 export PATH=$PATH:/opt/backtrace/bin
+export PATH="$PATH:/Users/jacobgraff/.pyenv/bin"
+export PATH="$PATH:$(pyenv root)/versions/3.6.8/bin"
 
 
 export LD_LIBRARY_PATH="/usr/lib:/usr/local/lib64:/usr/lib64:/usr/local/adnxs/lib:$HOME/local/lib:/usr/local/lib:$LD_LIRARY_PATH"
@@ -204,4 +264,10 @@ if [[ -S "$SSH_AUTH_SOCK" && ! -h "$SSH_AUTH_SOCK" ]]; then
 fi
 export SSH_AUTH_SOCK=~/.ssh/ssh_auth_sock;
 
+export VAULT_ADDR=https://vault.giphy.tech
+
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
