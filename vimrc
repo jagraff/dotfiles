@@ -27,6 +27,7 @@ filetype plugin on
 colorscheme darkblue
 cmap w!! w !sudo tee >/dev/null %
 
+au BufNewFile,BufRead Jenkinsfile setf groovy
 
 autocmd FileType c call SetCOptions()
 autocmd FileType cc call SetCOptions()
@@ -56,7 +57,9 @@ autocmd FileType ruby set shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 autocmd FileType html set shiftwidth=4 tabstop=4 softtabstop=4 expandtab
 autocmd FileType lisp set shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 autocmd FileType lua set shiftwidth=4 tabstop=4 softtabstop=4 expandtab
-autocmd FileType yaml set shiftwidth=2 tabstop=2 softtabstop=2 expandtab
+autocmd FileType yaml set shiftwidth=4 tabstop=4 softtabstop=4 expandtab
+autocmd FileType yml set shiftwidth=4 tabstop=4 softtabstop=4 expandtab
+autocmd FileType groovy set shiftwidth=4 tabstop=4 softtabstop=4 expandtab
 autocmd BufNew,BufEnter *.erb set shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 autocmd BufNew,BufEnter *.h set ft=c
 

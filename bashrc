@@ -9,12 +9,6 @@ function gcb() {
         fi
 }
 
-function k_context() {
-    current_context=$(kubectl config current-context | cut -f1 -d".")
-
-    echo $current_context
-}
-
 PROMPT_DIRTRIM=3
 
 SMALLPROMPT=0
@@ -32,12 +26,12 @@ function toggle() {
 }
 
 function k_context() {
-    local curr_context=$KUBECTL_CONTEXT
-    echo "$curr_context" | awk '{ split($1, cmpts, "."); print(cmpts[1]) }'
+    local curr_context=$KUBECONFIG
+    echo "$curr_context" | awk '{ split($1, cmpts, "-"); print(cmpts[2]) }'
 }
 
 function is_prod_context() {
-    echo $KUBECTL_CONTEXT | ag prod
+    echo $KUBECTL_CONTEXT | ag "whitesnake|aerosmith"
 }
 
 function is_prod_k8s_dir() {
@@ -183,7 +177,11 @@ alias ln="ln -i"
 alias cp="cp -i"
 
 unalias ll 2>/dev/null
-function ll() { ls -alF "$@" | lolcat -r -h 1 -v 1; }
+
+function ll() {
+	COLOR_COMMAND="lolcat -r -h 1 -v 1"
+	ls -alF "$@" | eval "$COLOR_COMMAND"; 
+}
 
 # ls alias
 alias l='ls'
@@ -194,13 +192,12 @@ alias ..='cd ..'
 alias gs='cd ~/git/giphy/giphy-services'
 
 # K8S contexts
+export KUBECONFIG=~/.kube/config-hanson
+
 alias k=kubectl
-alias ks='k config use-context'
-alias snek='ks whitesnake.prod.giphy.tech'
-alias nkotb='ks nkotb.qa.giphy.tech'
-alias violet='ks prod-violet.giphy.tech'
-alias ratt='ks ratt.prod.giphy.tech'
-alias lfo='ks lfo.dev.giphy.tech'
+alias hanson='export KUBECONFIG=~/.kube/config-hanson'
+alias snek='export KUBECONFIG=~/.kube/config-whitesnake'
+alias aero='export KUBECONFIG=~/.kube/config-aerosmith'
 
 
 export GS="~/git/giphy/giphy-services"
@@ -271,3 +268,9 @@ export VAULT_ADDR=https://vault.giphy.tech
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/jacobgraff/google-cloud-sdk/path.bash.inc' ]; then . '/Users/jacobgraff/google-cloud-sdk/path.bash.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/jacobgraff/google-cloud-sdk/completion.bash.inc' ]; then . '/Users/jacobgraff/google-cloud-sdk/completion.bash.inc'; fi
