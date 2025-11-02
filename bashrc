@@ -13,25 +13,12 @@ PROMPT_DIRTRIM=3
 
 SMALLPROMPT=0
 
-function fetch_context() {
-    KUBECTL_CONTEXT=$(kubectl config current-context)
-}
-
 function toggle() {
     if [ $SMALLPROMPT != 1 ]; then
         SMALLPROMPT=1
     else
         SMALLPROMPT=0
     fi
-}
-
-function k_context() {
-    local curr_context=$KUBECTL_CONTEXT
-    echo "$curr_context" | awk '{ split($1, cmpts, "."); print(cmpts[1]) }'
-}
-
-function is_prod_context() {
-    echo $KUBECTL_CONTEXT | ag prod
 }
 
 Green='\[\e[0;32m\]'
@@ -67,19 +54,12 @@ function __my_prompt_command() {
     local clock_color=$BlueOnBlack
     local dir_color=$BlackOnGreen
     local git_color=$YellowOnBlack
-    local k8s_color=$GreenOnBlack
     local exit_color=$BlackOnRed
     local prompt_color=$White
     local default_color=$WhiteOnBlack
 
-    fetch_context
-
-    if [ $(is_prod_context) ]; then
-        k8s_color=$GreenOnWhite
-    fi
 
     local clock_s="${clock_color}\D{%T} "
-    local k8s_s="${k8s_color} $(k_context) "
     local dir_s="${dir_color} \w "
     local prompt_s="${prompt_color}\$"
 
@@ -95,7 +75,7 @@ function __my_prompt_command() {
 
     local git_s="${git_color}${gcb_output}"
 
-    PS1="${clock_s}${git_s}${k8s_s}${dir_s}${exit_s}${White}${RESET}\n${prompt_s} "
+    PS1="${clock_s}${git_s}${dir_s}${exit_s}${White}${RESET}\n${prompt_s} "
 }
 
 shopt -s checkwinsize
@@ -156,6 +136,8 @@ unalias reset &>/dev/null
 alias realreset="$(which reset)"
 alias reset="source $HOME/.bashrc && clear"
 
+alias copen="open -a 'Google Chrome'"
+
 # stolen from /etc/profile
 function pathmunge {
     if ! echo $PATH | egrep -q "(^|:)$1($|:)" ; then
@@ -168,6 +150,7 @@ function pathmunge {
 }
 
 export PATH="/bin:/usr/bin"
+pathmunge "/opt/homebrew/bin"
 pathmunge "/sbin"
 pathmunge "/usr/sbin"
 pathmunge "/usr/local/bin" 

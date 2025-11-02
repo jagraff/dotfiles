@@ -4,7 +4,7 @@ Helptags
 syntax on
 
 set mouse=a
-set ttymouse=xterm2
+set ttymouse=sgr
 
 "au BufNewFile,BufRead *.html,*.htm,*.shtml,*.stm,*.tmpl set ft=jinja
 "
