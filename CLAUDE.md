@@ -23,5 +23,6 @@ Run `bash setup.bash` from the repo root to symlink all dotfiles into `$HOME` (s
 - `vimrc` - Vim config: filetype-specific indent rules, cscope integration, pathogen plugins, key mappings (`jj` for Esc, `;` for `:`, `mm` for `:qa`)
 - `tmux.conf` - Tmux config: `C-a` prefix, vim-style pane navigation (hjkl), `\` and `-` for splits
 - `gitconfig` - Git user config, LFS filters, aliases (`shove`, `publish`, `a`)
-- `claude/` - Claude Code config directory, symlinked into `~/.claude/` (currently tracks `settings.json`)
+- `claude/` - Claude Code config directory, symlinked into `~/.claude/` (tracks `settings.json` and `commands/`)
+- `claude/commands/` - Custom slash commands for Claude Code (e.g., `/jagout`)
 - `setup.bash` - Installation script that creates symlinks and installs vim plugins

@@ -10,6 +10,8 @@ done
 mkdir -p ~/.claude
 rm -f ~/.claude/settings.json
 ln -s "$PWD/claude/settings.json" ~/.claude/settings.json
+rm -f ~/.claude/commands
+ln -s "$PWD/claude/commands" ~/.claude/commands
 
 mkdir -p ~/.vim/bundle
 mkdir -p ~/.vim/autoload
