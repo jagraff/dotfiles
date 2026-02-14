@@ -6,6 +6,11 @@ for f in $files ; do
     ln -s "$PWD/$nodot" $fullpath
 done
 
+# claude code config
+mkdir -p ~/.claude
+rm -f ~/.claude/settings.json
+ln -s "$PWD/claude/settings.json" ~/.claude/settings.json
+
 mkdir -p ~/.vim/bundle
 mkdir -p ~/.vim/autoload
 
