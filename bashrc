@@ -188,3 +188,4 @@ fi
 export SSH_AUTH_SOCK=~/.ssh/ssh_auth_sock;
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
+export PATH="$HOME/.local/bin:$PATH"
