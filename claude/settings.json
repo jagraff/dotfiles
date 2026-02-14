@@ -1,5 +1,9 @@
 {
-  "alwaysThinkingEnabled": true,
+  "permissions": {
+    "allow": [
+      "Bash(say:*)"
+    ]
+  },
   "hooks": {
     "Notification": [
       {
@@ -12,5 +16,6 @@
         ]
       }
     ]
-  }
+  },
+  "alwaysThinkingEnabled": true
 }
