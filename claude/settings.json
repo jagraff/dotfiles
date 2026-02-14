@@ -1,3 +1,16 @@
 {
-  "alwaysThinkingEnabled": true
+  "alwaysThinkingEnabled": true,
+  "hooks": {
+    "Notification": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "say 'Claude needs your attention'"
+          }
+        ]
+      }
+    ]
+  }
 }
